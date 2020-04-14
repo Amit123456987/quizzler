@@ -34,19 +34,22 @@ class _QuizPageState extends State<QuizPage> {
   // scoreKeeper.add(element);
   // scoreKeeper.insert(index,element);
   List<Icon> scoreKeeper = [];
+  int SecondLastQuestion = quizBrain.getQuestionBankSize()-2;
 
   void CheckAnswer(bool UserPickedAnswer) {
     setState(() {
-      if (quizBrain.getQuestionAnswer() == UserPickedAnswer)
+      if( quizBrain.getQuestionNumber() != SecondLastQuestion ) {
+        if (quizBrain.getQuestionAnswer() == UserPickedAnswer)
           scoreKeeper.add(Icon(Icons.check, color: Colors.green, size: 22,));
-      else
+        else
           scoreKeeper.add(Icon(Icons.close, color: Colors.red, size: 22,));
+      }
 
       if( quizBrain.getQuestionNumber() == quizBrain.getQuestionBankSize()-1 ){
         Alert(
           context: context,
-          title: "Quiz Ends",
-          desc: "Click On start Button to start it again...",
+          title: "Finished",
+          desc: "You have Finished your Quiz!!!",
           buttons: [
             DialogButton(
               child: Text(
@@ -54,15 +57,18 @@ class _QuizPageState extends State<QuizPage> {
                 style: TextStyle(color: Colors.white, fontSize: 23),
               ),
               onPressed: () {
-                  Navigator.pop(context);
-                  scoreKeeper = [];
-                  quizBrain.startQuizAgain();
+                  setState(() {
+                    Navigator.pop(context);
+                    scoreKeeper = [];
+                    quizBrain.startQuizAgain();
+                  });
               },
               width: 120,
             )
           ],
         ).show();
       }
+      SecondLastQuestion = quizBrain.getQuestionNumber();
       quizBrain.nextQuestion();
     });
   }

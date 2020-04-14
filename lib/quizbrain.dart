@@ -38,7 +38,7 @@ class QuizBrain {
   }
 
   int getQuestionBankSize(){
-    return(_questionBank.length-1);
+    return(_questionBank.length);
   }
 
   int getQuestionNumber(){
